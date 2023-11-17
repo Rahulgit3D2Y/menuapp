@@ -1,24 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import Menu from './Menu';
+import Categories from './Categories';
+import items from './data';
+
+// Dynamically compute unique categories
+const categories = [...new Set(items.map(item => item.category))];
 
 function App() {
+  const [menuItems, setMenuItems] = useState(items);
+
+  const filterItems = (category) => {
+    if (category === 'all') {
+      setMenuItems(items);
+    } else {
+      setMenuItems(items.filter((item) => item.category === category));
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <main>
+      <section className="menu section">
+        <div className="title">
+          <h2>our menu</h2>
+          <div className="underline"></div>
+        </div>
+        {/* Pass dynamically computed categories to Categories component */}
+        <Categories categories={categories} filterItems={filterItems} />
+        <Menu items={menuItems} />
+      </section>
+    </main>
   );
 }
 
